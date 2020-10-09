@@ -11,26 +11,29 @@ const site = {
 		description: '该测试站点描述说明，此为默认说明，演示用',
 		copyrightYear: '2020',
 		detailDate: '03/20/2020 00:00:00',
-		headImageUrl: 'https://thlg.ml/images/blogHead2.jpg',
-		backImageUrl: 'https://thlg.ml/images/background2.jpg',
+		head: {
+			back_color: '#fff',
+			active_back_color: '#e6e3e3',
+			color: '#000',
+			active_color: '#000',
+			back_img: '',
+		},
+		sidebar: {
+			back_color: '#ffffff',
+			active_back_color: '',
+			main_color: '#303133',
+			active_main_color: '#409EFF',
+			minor_color: '',
+			active_minor_color: '',
+		},
+		siteback: { back_color: '#eeeeee', isShow: true, back_img: '' },
 		menuList: [], //菜单
 		navlist: [], //导航  分类
 		links: [], // 第三方链接
 		blogrolllist: [], // 友链
 		QRlist: [], // 打赏
 		isSearch: false, // 搜索功能
-		L2DwidgetConfig: {
-			pluginModelPath: '/live2d-widget-model-koharu/assets/',
-			tagMode: false,
-			debug: false,
-			model: {
-				jsonPath:
-					'/live2dw/live2d-widget-model-koharu/assets/koharu.model.json',
-			},
-			display: { position: 'right', width: 150, height: 300 }, //调整大小,和位置
-			mobile: { show: true }, //要不要盯着你的鼠标看
-			log: false,
-		},
+		L2DwidgetConfig: {},
 	}),
 	getters: {
 		site_pattern(state) {
@@ -72,14 +75,17 @@ const site = {
 		site_QRlist(state) {
 			return state.QRlist
 		},
-		site_back_image_url(state) {
-			return state.backImageUrl
+		site_back(state) {
+			return state.siteback
 		},
-		site_head_image_url(state) {
-			return state.headImageUrl
+		site_head(state) {
+			return state.head
 		},
 		siteL2DwidgetConfig(state) {
 			return state.L2DwidgetConfig
+		},
+		site_Sidebar(state) {
+			return state.sidebar
 		},
 	},
 	mutations: {
@@ -116,26 +122,32 @@ const site = {
 		setQrlist(state, QRlist) {
 			state.QRlist = QRlist
 		},
-		setbackImageUrl(state, backImageUrl) {
-			state.backImageUrl = backImageUrl
+		setsiteBack(state, siteback) {
+			console.log(siteback)
+			state.siteback = siteback
 		},
-		setheadImageUrl(state, headImageUrl) {
-			state.headImageUrl = headImageUrl
+		sethead(state, head) {
+			state.head = head
 		},
-		setL2DwidgetConfig(state, Config) {
-			console.log(Config);
-			const config = {
+		setL2DwidgetConfig(state, { Config, callback }) {
+			const newconfig = {
 				...Config,
 				pluginModelPath: `/live2d-widget-model-${Config.modelName}/assets/`,
 				model: {
 					scale: Config.model.scale,
-					jsonPath:`/live2d-widget-model-${Config.modelName}/assets/${Config.modelName}.model.json`
-				}
+					jsonPath: `/live2dw/live2d-widget-model-${Config.modelName}/assets/${Config.modelName}.model.json`,
+				},
 			}
-			state.L2DwidgetConfig = JSON.parse(JSON.stringify(config))
+			state.L2DwidgetConfig = JSON.parse(JSON.stringify(newconfig))
+			callback()
+		},
+		setSidebar(state, sidebar) {
+			state.sidebar = sidebar
 		},
 	},
-	actions: {},
+	actions: {
+		// asynSetL2DwidgetConfig({ state, commit, rootState }) {},
+	},
 }
 
 export default site

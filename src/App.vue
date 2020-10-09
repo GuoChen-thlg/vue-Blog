@@ -1,5 +1,11 @@
 <template>
-	<div id="app" :style="{ 'background-image': `url(${site_back_image_url})` }">
+	<div
+		id="app"
+		:style="{
+			'background-image': site_back.isShow ? `url(${site_back.back_img})` : '',
+			'--back_color': site_back.back_color,
+		}"
+	>
 		<div class="main">
 			<!-- <transition name="animat"> -->
 			<router-view />
@@ -43,14 +49,7 @@
 		</footer>
 		<div class="third-party-plug-in">
 			<!-- <aplayer :music="music" /> -->
-			<vueCanvasNest
-				:config="{
-					color: '0,0,0',
-					opacity: 0.7,
-					zIndex: -1,
-					count: 99,
-				}"
-			/>
+			<vueCanvasNest v-if="CanvasNest.isShow" :config="CanvasNest" />
 		</div>
 		<backtop />
 	</div>
@@ -73,6 +72,13 @@
 					MM: '00',
 					ss: '00'
 				},
+				CanvasNest: {
+					isShow: false,
+					color: 'red',
+					opacity: 0.7,
+					zIndex: -1,
+					count: 99,
+				}
 			}
 		},
 		created() {
@@ -81,20 +87,23 @@
 				window.addEventListener('message', (e) => {
 					if (e.data.type === 'previewPatternData') {
 						const config = e.data.data
-						this.setL2DwidgetConfig(config.L2Dwidget)
-						// console.log(config.L2Dwidget);
+						// 背景粒子
+						this.CanvasNest = { ...config.CanvasNest, color: /rgb\(.*\)/.test(config.CanvasNest.color) ? /(\s?\d{1,3}\s?\,?){3}/g.exec(config.CanvasNest.color)[0] : '0,0,255' }
+						// 看板娘
+						this.setL2DwidgetConfig({
+							Config: config.L2Dwidget,
+							callback: () => {
+								this.renderLive2dw()
+							}
+						})
+						//头部样式
+						this.sethead(config.head)
+						// 站点背景图
+						this.setsiteBack(config.site)
+						this.setSidebar(config.sidebar)
 					}
 				})
-
 			}
-			setTimeout(() => {
-				window.L2Dwidget.init({
-					pluginRootPath: '/live2dw/', //插件根目录路径
-					pluginJsPath: '/live2dw/lib/', //插件JS路径
-					...this.siteL2DwidgetConfig
-				})
-			console.dir(window.L2Dwidget);
-			}, 10000)
 		},
 		mounted() {
 			// const _this = this
@@ -123,11 +132,30 @@
 				'setlinks',
 				'setblogrolllist',
 				'setQrlist',
-				'setbackImageUrl',
-				'setheadImageUrl',
+				'setsiteBack',
+				'sethead',
 				'setL2DwidgetConfig',
+				'setSidebar',
 
 			]),
+			/**
+			 * 看板娘
+			 */
+			renderLive2dw() {
+				if (this.siteL2DwidgetConfig.isRender) {
+					setTimeout(() => {
+						window.L2Dwidget.init({
+							pluginRootPath: '/live2dw/', //插件根目录路径
+							pluginJsPath: '/live2dw/lib/', //插件JS路径
+							...this.siteL2DwidgetConfig
+						})
+					}, 1000)
+				}
+			},
+			/**
+			 * 站点配置数据获取
+			 * 初始化
+			 */
 			requestSite() {
 				siteInit().then(res => {
 					if (res && res.code === 200) {
@@ -141,11 +169,14 @@
 						this.setblogrolllist(res.data.blogrolllist)//设置友情链接列表
 						this.setQrlist(res.data.rewardQR)//打赏
 						this.setbackImageUrl(res.data.backImageUrl)
-						this.setheadImageUrl(res.data.headImageUrl)
+						// this.sethead(res.data.headImageUrl)
 						this.numberofwords = res.data.numberofwords//网站总字数
 					}
 				})
 			},
+			/**
+			 * 站点底部计时器
+			 */
 			createtime() {
 				let n = new Date(this.site_detailDate || this.site_copyrightYear);
 				let now = new Date
@@ -166,12 +197,18 @@
 				this['date']['MM'] = mnum
 				this['date']['ss'] = snum
 			},
+			/**
+			 * 窗口大小监测
+			 */
 			resize() {
 				window.addEventListener('resize', () => {
 					this.setinnerHeight(window.innerHeight)
 					this.setinnerWidth(window.innerWidth)
 				})
 			},
+			/**
+			 * 鼠标位置
+			 */
 			monitorMouse() {
 				throttle
 				window.addEventListener('mousemove', throttle(500, (event) => {
@@ -181,7 +218,7 @@
 		},
 		watch: {
 			'getMouseX': function () {
-				// console.log(this);
+				// console.log(this.getMouseX);
 			}
 		},
 		computed: {
@@ -190,8 +227,9 @@
 				'site_author_name',
 				'site_copyrightYear',
 				'site_detailDate',
-				'site_back_image_url',
+				'site_back',
 				'siteL2DwidgetConfig',
+
 			]),
 			...mapGetters('window', [
 				'getMouseX'
@@ -253,11 +291,12 @@
 	#app {
 		position: relative;
 		z-index: 0;
-		background-color: #eeeeee;
+		background-color: var(--back_color);
 		background-repeat: no-repeat;
 		background-attachment: fixed;
 		background-position: 50% 50%;
 		background-size: 100% 100%;
+		min-height: 450px;
 		.main {
 			position: relative;
 			z-index: 2;

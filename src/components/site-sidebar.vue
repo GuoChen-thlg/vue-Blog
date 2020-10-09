@@ -151,7 +151,8 @@
 			...mapGetters('site', {
 				name: 'site_author_name',
 				image: 'site_author_image',
-				description: 'site_description'
+				description: 'site_description',
+				site_Sidebar: 'site_Sidebar',
 			}),
 			...mapGetters('window', [
 				'getinnerHeight'
@@ -246,7 +247,6 @@
 					display: flex;
 					flex-wrap: wrap;
 					margin-top: 20px;
-
 					.links-of-author-item {
 						display: block;
 						width: 50%;
