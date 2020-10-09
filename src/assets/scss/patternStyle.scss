@@ -1,0 +1,92 @@
+@import './global.config.scss';
+.outer {
+	font-size: 16px;
+	display: flex;
+	justify-content: space-evenly;
+	align-items: flex-start;
+	// flex-direction: row-reverse;//right
+	.brand {
+		width: 240px;
+		aside {
+			@include bacgstyle;
+			margin-bottom: 15px;
+			animation: top_to_botton 0.5s;
+		}
+		.site-sidebar {
+			animation: botto_to_top 0.5s;
+		}
+	}
+	main {
+		width: 70%;
+		padding: 40px;
+		@include bacgstyle;
+		animation: right_to_left 0.5s;
+	}
+}
+@media screen and (max-width: 1024px) {
+}
+@media screen and (max-width: 1000px) {
+	.outer {
+		display: block;
+		.brand {
+			aside {
+				.site-head {
+					@include bacgstyle;
+				}
+			}
+			width: 100%;
+			.site-sidebar {
+				display: none;
+			}
+		}
+		main {
+			width: 95%;
+			margin: 0 auto;
+		}
+	}
+}
+@media screen and (min-width: 768px) {
+}
+@media screen and (max-width: 375px) {
+}
+
+@keyframes top_to_botton {
+	0% {
+		opacity: 0;
+		transform: translateY(-100%);
+	}
+	100% {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+@keyframes left_to_right {
+	0% {
+		opacity: 0;
+		transform: translateX(-100%);
+	}
+	100% {
+		opacity: 1;
+		transform: translateX(0);
+	}
+}
+@keyframes botto_to_top {
+	0% {
+		opacity: 0;
+		transform: translateY(100%);
+	}
+	100% {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+@keyframes right_to_left {
+	0% {
+		opacity: 0;
+		transform: translateX(100%);
+	}
+	100% {
+		opacity: 1;
+		transform: translateX(0);
+	}
+}

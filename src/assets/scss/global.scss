@@ -1,0 +1,25 @@
+* {
+	// 滚动条样式
+	::-webkit-scrollbar {
+		width: 10px;
+		height: 10px;
+	}
+	// 滑块
+	::-webkit-scrollbar-thumb {
+		// background-color: #0ee4e0;
+		border-radius: 10px;
+		// &:hover {
+		background-color: #777;
+		// }
+	}
+	// 滑道
+	::-webkit-scrollbar-track {
+		box-shadow: inset 0 0 6px #333;
+		border-radius: 10px;
+	}
+	::selection {
+		background: #262a30;
+		color: #fff;
+	}
+	
+}
