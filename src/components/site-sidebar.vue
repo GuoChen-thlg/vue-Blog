@@ -31,13 +31,18 @@
 			</li>
 		</ul>
 		<section v-show="allShow ? tabInex == 'tab1' : false">
-			<div
+			<div class="site-overview"
 				:style="{
 					'max-height':
 						getinnerHeight > 0 ? getinnerHeight - offset + 'px' : 'auto',
 				}"
 			>
-				文章目录
+				<ul v-if="getPostCatalog.length > 0">
+					<template v-for="(item, i) in getPostCatalog">
+						<li class="catalog" :key="i" @click="scrollto(item)">{{ item }}</li>
+					</template>
+				</ul>
+				<template v-else> 暂无目录 </template>
 			</div>
 		</section>
 		<section v-show="allShow ? tabInex == 'tab2' : true">
@@ -49,9 +54,9 @@
 				}"
 			>
 				<div class="site-author">
-					<img class="author-image" :src="image" alt="" />
-					<p class="author-name" v-text="name" />
-					<p class="description" v-text="description" />
+					<img v-if="author.image"  class="author-image" :src="author.image" alt="" />
+					<p class="author-name" v-text="author.name" />
+					<p class="description" v-text="author.description" />
 				</div>
 				<nav
 					class="site-state site-state-posts"
@@ -82,7 +87,7 @@
 							target="_blank"
 						>
 							<span>
-								<i :class="item['icon-class']"></i> {{ item['label'] }}
+								<i :class="['fa',item['icon-class']]"></i> {{ item['label'] }}
 							</span>
 						</router-link>
 					</template>
@@ -97,13 +102,14 @@
 					<ul class="links-of-blogroll-list">
 						<template v-for="(item, index) in blogrolllist">
 							<li :key="index" class="links-of-blogroll-item">
-								<router-link
-									:to="item['path']"
+								<a
+									:src="item['path']"
 									:title="item['label']"
 									target="_blank"
+									
 								>
 									<span v-text="item['label']"></span>
-								</router-link>
+								</a>
 							</li>
 						</template>
 					</ul>
@@ -138,26 +144,42 @@
 				tabInex: 'tab1',
 				offset: 122,
 				isFixed: false,
-				stitic_offsetTop: null
+				stitic_offsetTop: null,
+				catalog: [
+
+				]
+
 			}
 		},
 		mounted() {
 			this.stitic_offsetTop = this.$refs['site-sidebar']['offsetTop']
-			window.addEventListener('scroll', () => {
-				this.isFixed = this.stitic_offsetTop + 166 <= document.documentElement.scrollTop
+			window.addEventListener('scroll', () => {//166
+				this.isFixed = this.stitic_offsetTop + 0 <= document.documentElement.scrollTop
 			})
+		},
+		methods: {
+			scrollto(id) {
+				let arrid = id.split('')
+				if (/\d/.test(arrid[0])) {
+					document.documentElement.scrollTop = document.querySelector(`#\\3${arrid[0]} ${id.substring(1)}`).offsetTop - 5
+				} else {
+					document.documentElement.scrollTop = document.querySelector(`#${id}`).offsetTop - 5
+				}
+			},
+
 		},
 		computed: {
 			...mapGetters('site', {
-				name: 'site_author_name',
-				image: 'site_author_image',
-				description: 'site_description',
+				author: 'site_author',
 				site_Sidebar: 'site_Sidebar',
+				getPostCatalog: 'getPostCatalog'
 			}),
 			...mapGetters('window', [
-				'getinnerHeight'
+				'getinnerHeight',
+				'getscrollTop'
 			])
-		}
+		},
+
 	}
 </script>
 
@@ -186,6 +208,9 @@
 			}
 		}
 		section {
+			.catalog {
+				cursor: pointer;
+			}
 			.site-overview {
 				overflow-y: auto;
 				overflow-x: hidden;

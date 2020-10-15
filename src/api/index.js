@@ -1,46 +1,64 @@
 import { request as axios } from '../util/request'
 /**
  * @description 得到站点初始化信息
- * 
- * @returns 
+ *
+ * @returns
  */
 export function siteInit() {
 	return axios({
 		flag: 'siteInit',
-		url: '/api/site/init',
+		url: '/api/siteInit',
 		method: 'GET',
 	})
 }
 // 帖子列表
-export function getPostPist() {
+export function getPostList() {
 	return axios({
 		flag: 'getPostPist',
-		url: '/api/site/postlist',
+		url: '/api/postlist',
 		method: 'GET',
 	})
 }
 // 帖子
-export function getPost() {
+export function getPost(params) {
 	return axios({
 		flag: 'getPost',
-		url: '/api/post',
+		url: '/api/queryPost',
 		method: 'GET',
-		// params?
+		params
+	})
+}
+// 标签列表
+export function getTagsList() {
+	return axios({
+		flag: 'getTagsList',
+		url: '/api/tagslist',
+		method: 'GET',
 	})
 }
 // 标签
-export function getTags(){
+export function getTags(params) {
 	return axios({
 		flag: 'getTags',
-		url: '/api/tags',
+		url: '/api/tag',
+		method: 'GET',
+		params,
+	})
+}
+// 分类列表
+export function getCategoryList() {
+	return axios({
+		flag: 'getCategoryList',
+		url: '/api/categorylist',
 		method: 'GET',
 	})
 }
 // 分类
-export function getCategory() {
+export function getCategory(params) {
 	return axios({
-		flag:'',
+		flag: 'getCategory',
 		url: '/api/category',
 		method: 'GET',
+		params,
 	})
 }

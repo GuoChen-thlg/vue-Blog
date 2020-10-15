@@ -1,11 +1,11 @@
 <template>
-	<layout class_name="post">
+	<layout class_name="post" :site_sidebar_all_show="true">
 		<main>
 			<article class="post">
 				<div class="post-block">
 					<postheader :post="post" />
-					<div class="post-body">
-						<MarkdownPreview />
+					<div class="post-body" id="post-body">
+						<MarkdownPreview ref="mark_pre" copyBtnText="copy" :initialValue="post.conent" />
 					</div>
 					<div class="end">
 						<p>
@@ -90,7 +90,7 @@
 	import { MarkdownPreview } from 'vue-meditor'
 	import Layout from '@/components/layout.vue'
 	import PostHeader from '@/components/post-header'
-	import { mapGetters } from 'vuex'
+	import { mapGetters, mapMutations } from 'vuex'
 	import { getPost } from '@/api'
 	export default {
 		name: 'Post',
@@ -102,17 +102,38 @@
 			}
 		},
 		mounted() {
-			this.init()
+			this.query()
+
 		},
 		methods: {
-			init() {
-				getPost().then(res => {
+			...mapMutations('site', [
+				'setPostCatalog'
+			]),
+			query() {
+				getPost({
+					title: this.$route.params.title
+				}).then(res => {
 					if (res.code === 200) {
 						this.post = res.data.post
 						this.copyright = res.copyright
 					}
+					setTimeout(() => {
+						this.creationCatalog()
+					}, 1000);
 				})
-
+			},
+			creationCatalog() {
+				let nodeList = document.querySelectorAll('#post-body *[id]')
+				let catalog = []
+				nodeList.forEach(item => {
+					catalog.push(item.id)
+				})
+				this.setPostCatalog(catalog)
+			}
+		},
+		watch: {
+			$route() {
+				this.query()
 			}
 		},
 		computed: {

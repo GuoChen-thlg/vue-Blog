@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "axios": "^0.20.0",
+    "v-track": "^0.8.10",
     "vue": "^2.6.11",
     "vue-aplayer": "^1.6.1",
     "vue-canvas-nest": "^2.0.0",

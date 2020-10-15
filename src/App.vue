@@ -19,7 +19,7 @@
 					new Date().getFullYear() > site_copyrightYear
 						? `${site_copyrightYear} ~ ${new Date().getFullYear()} `
 						: site_copyrightYear
-				}}&ensp;{{ site_author_name }}&ensp;
+				}}&ensp;{{ site_author.name }}&ensp;
 				<span class="with-love"><i class="fa fa-heart"></i> </span>
 				<span class="post-meta-divider">|</span>
 				<span class="post-meta-item-icon"
@@ -65,7 +65,7 @@
 		name: 'app',
 		data() {
 			return {
-				numberofwords: '',
+				numberofwords: '0',
 				date: {
 					day: '00',
 					HH: '00',
@@ -87,6 +87,7 @@
 				window.addEventListener('message', (e) => {
 					if (e.data.type === 'previewPatternData') {
 						const config = e.data.data
+						console.log(config);
 						// 背景粒子
 						this.CanvasNest = { ...config.CanvasNest, color: /rgb\(.*\)/.test(config.CanvasNest.color) ? /(\s?\d{1,3}\s?\,?){3}/g.exec(config.CanvasNest.color)[0] : '0,0,255' }
 						// 看板娘
@@ -100,7 +101,13 @@
 						this.sethead(config.head)
 						// 站点背景图
 						this.setsiteBack(config.site)
+						// 侧边栏
 						this.setSidebar(config.sidebar)
+						// 作者相关
+						this.setauthor(config.author)// 作者
+						this.setblogrolllist(config.blogrolllist)//友链
+						this.setlinks(config.links)// 三链
+
 					}
 				})
 			}
@@ -109,22 +116,21 @@
 			// const _this = this
 			// 计时器
 			setInterval(this.createtime, 250)
-			this.resize()
-			this.requestSite()
-			this.monitorMouse()
+			this.weindowEventListener()
 			let pattern = this.$router.history.current.query.pattern || 'production'
+			if (pattern == 'production') this.requestSite()
 			this.setpattern(pattern)
 		},
 		methods: {
 			...mapMutations('window', [
 				'setinnerHeight',
 				'setinnerWidth',
-				'setMouse'
+				'setMouse',
+				'setscrollTop'
 			]),
 			...mapMutations('site', [
 				'setpattern',
 				'setauthor',
-				'setdescription',
 				'setcopyrightYear',
 				'setdetailDate',
 				'setmenuList',
@@ -160,7 +166,6 @@
 				siteInit().then(res => {
 					if (res && res.code === 200) {
 						this.setauthor(res.data.author)
-						this.setdescription(res.data.description)
 						this.setcopyrightYear(res.data.copyrightYear)
 						this.setdetailDate(res.data.detailDate)
 						this.setmenuList(res.data.menuList)
@@ -168,7 +173,7 @@
 						this.setlinks(res.data.links)
 						this.setblogrolllist(res.data.blogrolllist)//设置友情链接列表
 						this.setQrlist(res.data.rewardQR)//打赏
-						this.setbackImageUrl(res.data.backImageUrl)
+						// this.setbackImageUrl(res.data.backImageUrl)
 						// this.sethead(res.data.headImageUrl)
 						this.numberofwords = res.data.numberofwords//网站总字数
 					}
@@ -198,22 +203,28 @@
 				this['date']['ss'] = snum
 			},
 			/**
-			 * 窗口大小监测
+			 * 事件监听
 			 */
-			resize() {
+			weindowEventListener() {
+				let title = ''
 				window.addEventListener('resize', () => {
 					this.setinnerHeight(window.innerHeight)
 					this.setinnerWidth(window.innerWidth)
 				})
-			},
-			/**
-			 * 鼠标位置
-			 */
-			monitorMouse() {
-				throttle
-				window.addEventListener('mousemove', throttle(500, (event) => {
-					this.setMouse({ x: event.clientX, y: event.clientY })
-				}), false)
+				// window.addEventListener('mousemove', throttle(500, (event) => {
+				// 	this.setMouse({ x: event.clientX, y: event.clientY })
+				// }), false)
+				window.addEventListener('scroll', () => {
+					this.setscrollTop(document.documentElement.scrollTop)
+				})
+				document.addEventListener('visibilitychange', function () {
+					if (document.hidden) {
+						title = document.title
+						document.title = '页面崩溃啦'
+					} else {
+						document.title = title
+					}
+				}, false);
 			}
 		},
 		watch: {
@@ -224,7 +235,7 @@
 		computed: {
 			...mapGetters('site', [
 				'site_pattern',
-				'site_author_name',
+				'site_author',
 				'site_copyrightYear',
 				'site_detailDate',
 				'site_back',

@@ -3,6 +3,7 @@ const window = {
 	state: {
 		innerHeight: document.documentElement.clientHeight,
 		innerWidth: -1,
+		scrollTop: 0,
 		mouse: {
 			x: 0,
 			y: 0,
@@ -21,6 +22,9 @@ const window = {
 		getMouseY(state) {
 			return state.mouse.y
 		},
+		getscrollTop(state) {
+			return state.scrollTop
+		},
 	},
 	mutations: {
 		setinnerHeight(state, newinnerHeight) {
@@ -32,6 +36,9 @@ const window = {
 		setMouse(state, mouse) {
 			state.mouse.x = mouse.x
 			state.mouse.y = mouse.y
+		},
+		setscrollTop(state, top) {
+			state.scrollTop = top
 		},
 	},
 	actions: {

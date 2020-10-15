@@ -4,7 +4,9 @@
 			<h1>标签</h1>
 			<div class="post-body">
 				<div class="tag-cloud">
-					<div class="tag-cloud-title">目前共计 1 个标签</div>
+					<div class="tag-cloud-title">
+						目前共计 {{ tags.length || 0 }} 个标签
+					</div>
 					<div class="tag-cloud-tags">
 						<template v-for="(item, index) in tags">
 							<router-link
@@ -20,7 +22,7 @@
 			</div>
 		</main>
 		<main v-if="!flag">
-			<timeline title="React" assistant="标签" :datalist="list"> </timeline>
+			<timeline :title="$route.params.label" assistant="标签" :datalist="list"> </timeline>
 		</main>
 	</layout>
 </template>
@@ -29,7 +31,7 @@
 	// @ is an alias to /src
 	import Layout from '@/components/layout.vue'
 	import Timeline from '@/components/timeline.vue'
-	import { getTags } from '@/api/index'
+	import { getTagsList, getTags } from '@/api/index'
 	import { mapGetters } from 'vuex'
 	import axios from 'axios'
 	export default {
@@ -47,14 +49,18 @@
 		},
 		methods: {
 			init() {
-				getTags().then(res => {
+				getTagsList().then(res => {
 					if (res.code === 200) {
 						this.tags = res.data.tags
 					}
 				})
 			},
 			requestTag(tag) {
-				console.log(tag);
+				getTags({ tag }).then(res => {
+					if (res.code == 200) {
+						this.list = res.data.posts
+					}
+				})
 			},
 			analysisRoute(route) {
 				let label = route.params.label

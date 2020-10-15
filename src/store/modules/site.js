@@ -7,8 +7,8 @@ const site = {
 			name: '测试站点',
 			image: 'https://thlg.ml/images/tx.jpg',
 			subtitle: '测试副标题',
+			description: '该测试站点描述说明，此为默认说明，演示用',
 		},
-		description: '该测试站点描述说明，此为默认说明，演示用',
 		copyrightYear: '2020',
 		detailDate: '03/20/2020 00:00:00',
 		head: {
@@ -27,32 +27,46 @@ const site = {
 			active_minor_color: '',
 		},
 		siteback: { back_color: '#eeeeee', isShow: true, back_img: '' },
-		menuList: [], //菜单
+		menuList: [
+			{
+				'icon-class': 'fa fa-fw fa-home',
+				path: '/',
+				label: '首页',
+			},
+			{
+				'icon-class': 'fa fa-fw fa-tags',
+				path: '/tags',
+				label: '标签',
+			},
+			{
+				'icon-class': ' fa fa-fw fa-th',
+				path: '/categories',
+				label: '分类',
+			},
+			{
+				'icon-class': 'fa fa-fw fa-archive',
+				path: '/archives',
+				label: '归档',
+			},
+		], //菜单
 		navlist: [], //导航  分类
 		links: [], // 第三方链接
 		blogrolllist: [], // 友链
 		QRlist: [], // 打赏
 		isSearch: false, // 搜索功能
 		L2DwidgetConfig: {},
+		postCatalog: [],
 	}),
 	getters: {
 		site_pattern(state) {
 			return state.pattern
 		},
-		site_author_name(state) {
-			return state.author.name
+		site_author(state) {
+			return state.author
 		},
-		site_author_image(state) {
-			return state.author.image
-		},
-		site_author_subtitle(state) {
-			return state.author.subtitle
-		},
-		site_description(state) {
-			return state.description
-		},
+		
 		site_copyrightYear(state) {
-			return state.copyrightYear | 0
+			return parseInt(state.copyrightYear)
 		},
 		site_detailDate(state) {
 			return state.detailDate
@@ -87,25 +101,31 @@ const site = {
 		site_Sidebar(state) {
 			return state.sidebar
 		},
+		getPostCatalog(state) {
+			return state.postCatalog
+		},
 	},
 	mutations: {
 		setpattern(state, pattern) {
 			state.pattern = pattern
 		},
 		setauthor(state, author) {
-			state.author = author
-		},
-		setdescription(state, description) {
-			state.description = description
+			if (author) {
+				state.author = author
+			}
 		},
 		setcopyrightYear(state, copyrightYear) {
-			state.copyrightYear = copyrightYear
+			if (copyrightYear) {
+				state.copyrightYear = copyrightYear
+			}
 		},
 		setdetailDate(state, detailDate) {
 			state.detailDate = detailDate
 		},
 		setmenuList(state, menuList) {
-			state.menuList = menuList
+			if (menuList) {
+				state.menuList = menuList
+			}
 		},
 		setnavlist(state, navlist) {
 			state.navlist = navlist
@@ -120,14 +140,19 @@ const site = {
 			state.isSearch = isSearch
 		},
 		setQrlist(state, QRlist) {
-			state.QRlist = QRlist
+			if (QRlist) {
+				state.QRlist = QRlist
+			}
 		},
 		setsiteBack(state, siteback) {
-			console.log(siteback)
-			state.siteback = siteback
+			if (siteback) {
+				state.siteback = siteback
+			}
 		},
 		sethead(state, head) {
-			state.head = head
+			if (head) {
+				state.head = head
+			}
 		},
 		setL2DwidgetConfig(state, { Config, callback }) {
 			const newconfig = {
@@ -143,6 +168,9 @@ const site = {
 		},
 		setSidebar(state, sidebar) {
 			state.sidebar = sidebar
+		},
+		setPostCatalog(state, catalog) {
+			state.postCatalog = catalog
 		},
 	},
 	actions: {

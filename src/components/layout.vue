@@ -21,7 +21,7 @@
 	import SiteHead from '@/components/site-head.vue'
 	import SiteNav from '@/components/site-nav.vue'
 	import SiteSidebar from '@/components/site-sidebar.vue'
-	import { getPostPist } from '@/api/index'
+	// import { getPostList } from '@/api/index'
 	import { mapGetters } from 'vuex'
 	export default {
 		name: 'layout',
@@ -32,7 +32,7 @@
 			},
 			'site_sidebar_all_show': {
 				type: Boolean,
-				default: true
+				default: false
 			}
 		},
 		mounted() {

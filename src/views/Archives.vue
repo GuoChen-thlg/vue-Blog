@@ -1,7 +1,9 @@
 <template>
 	<layout class_name="archives">
 		<main>
-			<!-- <timeline> </timeline> -->556565456
+			<timeline title="2020" assistant="" :datalist="[]">
+				<div class="archive-move"></div>
+			</timeline>
 		</main>
 	</layout>
 </template>
@@ -15,14 +17,14 @@
 		name: 'Archives',
 		data() {
 			return {
-				
+
 			}
 		},
 		mounted() {
-			
+
 		},
 		methods: {
-			
+
 		},
 		computed: {
 			...mapGetters('site', [

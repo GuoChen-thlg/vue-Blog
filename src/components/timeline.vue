@@ -3,14 +3,14 @@
 		<div class="posts-collapse">
 			<slot></slot>
 			<div class="collection-title">
-				<h1>
+				<h1 class="archive-move">
 					{{ title }}<small>{{ assistant }}</small>
 				</h1>
 			</div>
 			<template v-for="(item, index) in datalist">
 				<article :key="index">
 					<router-link :to="item['path']" tag="header"
-						><time>{{ item['lastDate'] }}</time
+						><time>{{ new Date(item['lastDate']).toLocaleDateString() }}</time
 						>{{ item['title'] }}</router-link
 					>
 				</article>
@@ -50,26 +50,40 @@
 				left: 2px;
 				top: 20px;
 			}
+			.archive-move {
+				position: relative;
+				&::before {
+					content: '';
+					display: block;
+					width: 8px;
+					height: 8px;
+					border-radius: 50%;
+					background-color: #bbb;
+					position: absolute;
+					top: 50%;
+					transform: translateY(-50%);
+				}
+			}
 			.collection-title {
 				h1 {
-					position: relative;
+					// position: relative;
 					// padding: 0 25px;
 					text-indent: 1em;
 					small {
 						color: #bbb;
 						margin-left: 5px;
 					}
-					&::before {
-						content: '';
-						display: block;
-						width: 8px;
-						height: 8px;
-						border-radius: 50%;
-						background-color: #bbb;
-						position: absolute;
-						top: 50%;
-						transform: translateY(-50%);
-					}
+					// &::before {
+					// 	content: '';
+					// 	display: block;
+					// 	width: 8px;
+					// 	height: 8px;
+					// 	border-radius: 50%;
+					// 	background-color: #bbb;
+					// 	position: absolute;
+					// 	top: 50%;
+					// 	transform: translateY(-50%);
+					// }
 				}
 			}
 			article {
@@ -100,7 +114,7 @@
 							background-color: #222;
 						}
 					}
-					time{
+					time {
 						margin-right: 10px;
 						font-size: 12px;
 					}

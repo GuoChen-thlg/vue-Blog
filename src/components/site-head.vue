@@ -2,15 +2,15 @@
 	<div
 		class="site-head"
 		:style="{
-			'background-image': site_head.isShow?`url(${site_head.back_img})`:'',
+			'background-image': site_head.isShow ? `url(${site_head.back_img})` : '',
 			'--back_color': site_head.back_color,
 			'--active_back_color': site_head.active_back_color,
 			'--color': site_head.color,
 			'--active_color': site_head.active_color,
 		}"
 	>
-		<router-link to="/" tag="h3">{{ site_author_name }}</router-link>
-		<p>{{ site_author_subtitle }}</p>
+		<router-link to="/" tag="h3">{{ site_author.name }}</router-link>
+		<p >{{ site_author.subtitle }}</p>
 	</div>
 </template>
 
@@ -18,12 +18,21 @@
 	import { mapGetters } from 'vuex'
 	export default {
 		name: 'site-head',
+		data() {
+			return {
+				data: 13123
+			}
+		},
 		computed: {
 			...mapGetters('site', [
-				'site_author_name',
-				'site_author_subtitle',
+				'site_author',
 				'site_head'
 			])
+		},
+		methods: {
+			handleClick() {
+				console.log('执行相应操作');
+			}
 		}
 	}
 </script>

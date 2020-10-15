@@ -37,7 +37,7 @@
 	// @ is an alias to /src
 	import Posts from '@/components/posts.vue'
 	import Layout from '@/components/layout.vue'
-	import { siteInit, getPostPist } from '@/api/index'
+	import { siteInit, getPostList } from '@/api/index'
 	import axios from 'axios'
 	import { mapGetters } from 'vuex'
 	export default {
@@ -54,10 +54,10 @@
 		},
 		methods: {
 			init() {
-				axios.all([getPostPist()]).then(
+				axios.all([getPostList()]).then(
 					axios.spread((res) => {
 						if (res.code === 200) {
-							this.postlist = res.data['postlist']
+							this.postlist = res.data['postList']
 							this.presentPage = res.data['presentPage']
 							this.overallPage = res.data['overallPage']
 						}
@@ -65,7 +65,7 @@
 				)
 			},
 			pagingFun(pagenum) {
-				// getPostPist()
+				// getPostList()
 				this.presentPage = pagenum
 				console.log(pagenum);
 			}

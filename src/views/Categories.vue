@@ -46,28 +46,24 @@
 			</div>
 		</main>
 		<main v-if="!flag">
-			<timeline title="React" assistant="分类" :datalist="list"> </timeline>
+			<timeline :title="$route.params.class" assistant="分类" :datalist="list"> </timeline>
 		</main>
 	</layout>
 </template>
 
 <script>
 	// @ is an alias to /src
-	// import SiteHead from '@/components/site-head.vue'
-	// import SiteNav from '@/components/site-nav.vue'
-	// import SiteSidebar from '@/components/site-sidebar.vue'
 	import Layout from '@/components/layout.vue'
 	import Posts from '@/components/posts.vue'
 	import Timeline from '@/components/timeline.vue'
-	import { getCategory } from '@/api/index'
+	import { getCategoryList, getCategory } from '@/api/index'
 	import { mapGetters } from 'vuex'
-	import axios from 'axios'
 	export default {
 		name: 'Categories',
 		data() {
 			return {
 				flag: true,
-				sum: 8,
+				sum: 0,
 				categoryList: [
 					{
 						path: '/categories/js',
@@ -81,18 +77,6 @@
 							}
 						]
 					},
-					{
-						path: '/categories/js',
-						label: 'js',
-						count: 8,
-						child: [
-							{
-								path: '/categories/js',
-								label: 'js',
-								count: 8,
-							}
-						]
-					}
 				],
 				list: [
 					{
@@ -100,27 +84,6 @@
 						path: '/post/test',
 						lastDate: '2020-09-22'
 					},
-					{
-						title: '测试文章2',
-						path: '/post/test',
-						lastDate: '2020-09-22'
-					}, {
-						title: '测试文章2',
-						path: '/post/test',
-						lastDate: '2020-09-22'
-					}, {
-						title: '测试文章2',
-						path: '/post/test',
-						lastDate: '2020-09-22'
-					}, {
-						title: '测试文章2',
-						path: '/post/test',
-						lastDate: '2020-09-22'
-					}, {
-						title: '测试文章2',
-						path: '/post/test',
-						lastDate: '2020-09-22'
-					}
 				]
 
 
@@ -129,17 +92,23 @@
 		mounted() {
 			this.analysisRoute(this.$route)
 			this.init()
-
 		},
 		methods: {
 			init() {
-
-
+				getCategoryList().then(res => {
+					if (res && res.code == 200) {
+						console.log(res.data);
+						this.sum = res.data.total
+						this.categoryList = res.data.categoryList
+					}
+				})
 			},
 			requestCategories(label) {
-				getCategory().then(res => {
+				getCategory(
+					{ category: label }
+				).then(res => {
 					if (res.code === 200) {
-						console.log(res.data)
+						this.list = res.data.posts
 					}
 				})
 			},
@@ -181,7 +150,7 @@
 	@import '~@/assets/scss/global.config.scss';
 	.categories {
 		main {
-				@include bacgstyle;
+			@include bacgstyle;
 			h1 {
 				text-align: center;
 				word-break: break-word;

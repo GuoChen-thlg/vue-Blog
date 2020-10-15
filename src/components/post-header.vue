@@ -38,7 +38,7 @@
 							:to="item['path']"
 							v-text="item['value']"
 						></router-link
-						>{{ index === 1 ? '' : '，' }}
+						>{{ index === 0 ? '' : '，' }}
 					</template>
 				</span>
 			</span>
