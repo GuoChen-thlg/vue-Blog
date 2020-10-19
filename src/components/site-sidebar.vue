@@ -154,7 +154,7 @@
 		mounted() {
 			this.stitic_offsetTop = this.$refs['site-sidebar']['offsetTop']
 			window.addEventListener('scroll', () => {//166
-				this.isFixed = this.stitic_offsetTop + 0 <= document.documentElement.scrollTop
+				this.isFixed = this.stitic_offsetTop + 166 <= document.documentElement.scrollTop
 			})
 		},
 		methods: {

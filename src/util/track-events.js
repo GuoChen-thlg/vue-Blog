@@ -9,7 +9,7 @@ export default {
 		const {
 			$route: { name, path },
 		} = context
-		console.log('总访问量')
+		// console.log('总访问量')
 	},
 	/**
 	 * @name TONP 固定名称不支持修改
@@ -22,8 +22,8 @@ export default {
 		const {
 			$route: { name, path },
 		} = context
-		console.log(name, path)
-		console.log(dt - et)
+		// console.log(name, path)
+		// console.log(dt - et)
 	},
 	/**
 	 * @name trace 埋点唯一标识ID（自定义）
@@ -34,9 +34,9 @@ export default {
 		const {
 			$route: { name, path },
 		} = context
-		console.log({
-			name,
-			path,
-		})
+		// console.log({
+		// 	name,
+		// 	path,
+		// })
 	},
 }

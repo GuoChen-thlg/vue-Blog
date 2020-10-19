@@ -5,12 +5,12 @@ const site = {
 		pattern: 'production', //preview
 		author: {
 			name: '测试站点',
-			image: 'https://thlg.ml/images/tx.jpg',
+			image: '',
 			subtitle: '测试副标题',
 			description: '该测试站点描述说明，此为默认说明，演示用',
 		},
-		copyrightYear: '2020',
-		detailDate: '03/20/2020 00:00:00',
+		copyrightYear: new Date().getUTCFullYear(),
+		detailDate: new Date(),
 		head: {
 			back_color: '#fff',
 			active_back_color: '#e6e3e3',
@@ -64,7 +64,7 @@ const site = {
 		site_author(state) {
 			return state.author
 		},
-		
+
 		site_copyrightYear(state) {
 			return parseInt(state.copyrightYear)
 		},
