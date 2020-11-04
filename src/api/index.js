@@ -25,7 +25,7 @@ export function getPost(params) {
 		flag: 'getPost',
 		url: '/api/queryPost',
 		method: 'GET',
-		params
+		params,
 	})
 }
 // 标签列表
@@ -60,5 +60,13 @@ export function getCategory(params) {
 		url: '/api/category',
 		method: 'GET',
 		params,
+	})
+}
+export function search(data) {
+	return axios({
+		flag: 'search',
+		url: '/api/search',
+		method: 'POST',
+		data,
 	})
 }

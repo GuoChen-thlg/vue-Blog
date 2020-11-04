@@ -22,8 +22,8 @@ export default {
 		const {
 			$route: { name, path },
 		} = context
-		// console.log(name, path)
-		// console.log(dt - et)
+		console.log(name, path)
+		console.log(dt - et)
 	},
 	/**
 	 * @name trace 埋点唯一标识ID（自定义）

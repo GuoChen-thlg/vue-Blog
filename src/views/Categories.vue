@@ -97,7 +97,6 @@
 			init() {
 				getCategoryList().then(res => {
 					if (res && res.code == 200) {
-						console.log(res.data);
 						this.sum = res.data.total
 						this.categoryList = res.data.categoryList
 					}

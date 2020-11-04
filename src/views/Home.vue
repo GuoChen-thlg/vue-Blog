@@ -1,26 +1,4 @@
 <template>
-	<!-- <div class="home outer">
-		<div class="brand">
-			<aside>
-				<sitehead />
-				<sitenav :menulist="site_menuList" />
-			</aside>
-			<sitesidebar
-				:allShow="false"
-				:navlist="site_navlist"
-				:links="site_links"
-				:blogrolllist="site_blogrolllist"
-			/>
-		</div>
-		<main>
-			<posts
-				:postlist="postlist"
-				:presentPage="presentPage"
-				:overallPage="overallPage"
-				@upDataPaging="pagingFun"
-			/>
-		</main>
-	</div> -->
 	<layout class_name="home" :site_sidebar_all_show="false">
 		<main>
 			<posts

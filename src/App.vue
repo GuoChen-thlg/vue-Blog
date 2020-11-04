@@ -87,7 +87,6 @@
 				window.addEventListener('message', (e) => {
 					if (e.data.type === 'previewPatternData') {
 						const config = e.data.data
-						console.log(config);
 						// 背景粒子
 						this.CanvasNest = { ...config.CanvasNest, color: /rgb\(.*\)/.test(config.CanvasNest.color) ? /(\s?\d{1,3}\s?\,?){3}/g.exec(config.CanvasNest.color)[0] : '0,0,255' }
 						// 看板娘
@@ -107,7 +106,7 @@
 						this.setauthor(config.author)// 作者
 						this.setblogrolllist(config.blogrolllist)//友链
 						this.setlinks(config.links)// 三链
-
+						this.setisSearch(config.isSearch)
 					}
 				})
 			}
@@ -142,6 +141,7 @@
 				'sethead',
 				'setL2DwidgetConfig',
 				'setSidebar',
+				'setisSearch',
 
 			]),
 			/**
@@ -166,16 +166,22 @@
 				siteInit().then(res => {
 					if (res && res.code === 200) {
 						this.setauthor(res.data.author)
-						this.setcopyrightYear(res.data.copyrightYear)
-						this.setdetailDate(res.data.detailDate)
-						this.setmenuList(res.data.menuList)
-						this.setnavlist(res.data.navlist)
 						this.setlinks(res.data.links)
 						this.setblogrolllist(res.data.blogrolllist)//设置友情链接列表
 						this.setQrlist(res.data.rewardQR)//打赏
-						// this.setbackImageUrl(res.data.backImageUrl)
-						// this.sethead(res.data.headImageUrl)
-						this.numberofwords = res.data.numberofwords//网站总字数
+						this.setisSearch(res.data.isSearch)
+						//头部样式
+						this.sethead(res.data.head)
+						// 站点背景图
+						this.setsiteBack(res.data.site)
+						// 侧边栏
+						this.setSidebar(res.data.sidebar)
+						this.CanvasNest = { ...res.data.CanvasNest, color: res.data.CanvasNest.color2}
+						// this.setcopyrightYear(res.data.copyrightYear)
+						// this.setdetailDate(res.data.detailDate)
+						// this.setmenuList(res.data.menuList)
+						// this.setnavlist(res.data.navlist)
+						// this.numberofwords = res.data.numberofwords//网站总字数
 					}
 				})
 			},

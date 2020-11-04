@@ -51,13 +51,13 @@
 			search() {
 				this.popupShow = true
 				document.body.style.overflow = 'hidden'
-				console.log('show');
 			},
 			popupClose() {
 				this.popupShow = false
 				document.body.style.overflow = 'initial'
 			}
 		},
+		
 		components: {
 			'search-window': Search
 		}

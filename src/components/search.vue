@@ -4,22 +4,27 @@
 			<header>
 				<span class="search-icon"><i class="fa fa-search"></i> </span>
 				<div class="search-input-wrapper">
-					<input
-						type="text"
-						v-model="search_word"
-						placeholder="搜索..."
-					/>
+					<input type="text" v-model="search_word" placeholder="搜索..." />
 				</div>
-				<span class="popup-btn-close" @click="popupClose"
-					><i class="fa fa-times-circle"></i
-				></span>
+				<span class="popup-btn-close" @click="popupClose">
+					<i class="fa fa-times-circle"></i>
+				</span>
 			</header>
-			<div class="search-result" id="search-result"></div>
+			<div class="search-result" id="search-result">
+				<ul>
+					<template v-for="(item, index) in data">
+						<router-link :key="index" :to="item.path" tag="li">
+							<h4>{{ item.title }}</h4>
+						</router-link>
+					</template>
+				</ul>
+			</div>
 		</div>
 	</section>
 </template>
 
 <script>
+	import { search } from '@/api'
 	export default {
 		name: 'search',
 		props: {
@@ -30,13 +35,24 @@
 		},
 		data() {
 			return {
-				search_word: ''
+				search_word: '',
+				data: []
 			}
+		},
+		created(){
+			this.search_word=''
+			this.data=[]
 		},
 		watch: {
 			'search_word': function () {
-				console.log('搜索关键字');
+				this.search_word ? search({ search_word: this.search_word }).then(res => {
+					this.data = res.code == 200 ? res.data : []
+				}) : null
 			},
+
+			$route(){
+				this.popupClose()
+			}
 		},
 		methods: {
 			popupClose() {
